@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, make_response, render_template
 from flask_cors import CORS, cross_origin
 from redis_utils import rget, rset
 from settings import LOCAL
-from cards import Rule, Card, rule_of_string, shuffled_deck, deal_card, best_five_card_hand
+from cards import rule_of_string, shuffled_deck, deal_card, best_five_card_hand, get_card, compare_hands
 from secrets import compare_digest
 import random
 import requests
@@ -53,6 +53,7 @@ def new_game():
          for card in deck]), game_id=game_id)
     rset('cards', json.dumps([]), game_id=game_id)
     rset('dealer_cards', json.dumps([]), game_id=game_id)
+    rset('finished', 'false', game_id=game_id)
     return {'success': True}
 
 
@@ -85,10 +86,25 @@ def best_hands():
     return {'success': True, 'playerHand': player_hand and serialize_list_of_cards(player_hand.cards), 'dealerHand': dealer_hand and serialize_list_of_cards(dealer_hand.cards)}
 
 
+def finish_game(player_cards, dealer_cards, deck, game_id):
+    while len(dealer_cards) < 8:
+        card, deck = get_card(deck) 
+        dealer_cards = add_card(card, game_id, player=Player.DEALER)
+    player_hand = best_five_card_hand(player_cards)
+    dealer_hand = best_five_card_hand(dealer_cards)
+    rset('finished', 'true', game_id=game_id)
+    if compare_hands(player_hand, dealer_hand) == 1:
+        return {'success': True, 'message': 'You win!', 'playerHand': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+    else:
+        return {'success': True, 'message': 'You lose!', 'playerHand': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+
+
 @app.route("/deal", methods=['POST'])
 @cross_origin()
 def deal():
     game_id = request.json.get('gameId')
+    if rget('finished', game_id=game_id) == 'true':
+        return {'success': False, 'message': 'Game is over'}
     rule = request.json.get('rule')
     try:
         rule = rule_of_string(rule)
@@ -103,7 +119,9 @@ def deal():
     rset('deck', json.dumps(deck), game_id=game_id)
     player_cards = add_card(card, game_id)
     dealer_cards = add_cards(dealer_cards, game_id, player=Player.DEALER)
-    return {'success': True, 'cards': player_cards, 'dealerCards': dealer_cards}
+    if len(player_cards) == 5:
+        return finish_game(player_cards, dealer_cards, deck, game_id)
+    return { 'success': True, 'cards': player_cards, 'dealerCards': dealer_cards }
 
 
 if __name__ == '__main__':

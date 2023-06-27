@@ -36,7 +36,7 @@ class Rule():
     
     def __repr__(self):
         return " ".join(str(card) for card in self.cards)
-    
+
 class Card():
     def __init__(self, rank, suit):
         self.rank = rank
@@ -216,6 +216,12 @@ def shuffled_deck():
     deck = [Card(rank, suit) for rank in range(2, 15) for suit in "HDCS"]
     random.shuffle(deck)
     return deck
+
+def get_card(deck):
+    if not deck:
+        return None, []
+    card = card_of_dict(deck.pop())
+    return card.to_json(), deck
 
 def deal_card(deck, rule):
     if not deck:
