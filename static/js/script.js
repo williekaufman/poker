@@ -134,7 +134,7 @@ function selectCards(cards) {
     
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('selected')) {
+        if (!card.classList.contains('selected') && !card.classList.contains('dealt')) {
             atleast_one_unselected = true;
         }
     }
