@@ -17,7 +17,7 @@
     grid-template-columns: repeat(13, 1fr);
     gap: 10px;
     position: absolute;
-    top: 2%;
+    top: 3%;
     left: 50%;
     transform: translateX(-50%); 
     /* align-items: center; */

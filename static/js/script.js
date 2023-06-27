@@ -20,6 +20,9 @@ let playerHandDescription = document.getElementById('player-hand-description');
 let dealerHand = document.getElementById('dealer-hand');
 let dealerHandDescription = document.getElementById('dealer-hand-description');
 
+const howToPlayPopup = document.getElementById('how-to-play-popup');
+const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
+
 // Yes this is a stupid way to do it but copilot made it really fast lol
 let cards = {
     1: { 'rank': 14, 'suit': 'S' },
@@ -443,13 +446,13 @@ function handleKeyDown(e) {
             e.preventDefault();
             newGame();
         }
+    } if (e.key === 'Escape' && howToPlayPopup.style.visibility === 'visible') {
+        toggleHowToPlay(e);
     }
 }
 
 function toggleHowToPlay(event) {
     event.stopPropagation();
-    const howToPlayPopup = document.getElementById('how-to-play-popup');
-    const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
     if (howToPlayPopup.style.visibility === 'hidden') {
       howToPlayPopup.style.visibility = 'visible';
       howToPlayPopup.style.opacity = '1';
@@ -461,11 +464,9 @@ function toggleHowToPlay(event) {
     }
   }
 
-
 document.addEventListener('keydown', handleKeyDown);
 
 document.addEventListener('DOMContentLoaded', function () {
-    const howToPlayPopup = document.getElementById('how-to-play-popup');
     howToPlayPopup.style.visibility = 'hidden';
 });
 
