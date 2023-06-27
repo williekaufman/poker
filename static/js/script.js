@@ -299,7 +299,7 @@ function markDealtCards() {
 }
 
 function markDealerBestCards() {
-    if (dealerBestCards.length == 0) {
+    if (!dealerBestCards || dealerBestCards.length == 0) {
         return;
     }
     for (var card in cards) {
@@ -352,7 +352,6 @@ function handleFinished(data) {
 }
 
 function describeHands(playerDescription, dealerDescription) {
-    console.log(dealerBestCards);
     if (won === true) {
         playerHandDescription.classList.add('winning');
         dealerHandDescription.classList.add('losing');
