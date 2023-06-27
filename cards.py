@@ -25,6 +25,7 @@ def card_of_dict(d):
     return Card(d['rank'], d['suit'])
 
 def rule_of_string(s):
+    print(s)
     return Rule([card_of_string(card) for card in s.split()])
 
 class Rule():
@@ -68,14 +69,14 @@ def compare_hands_of_same_type(hand1, hand2):
 
 class StraightFlush():
     def __init__(self, cards):
-        self.high = cards
+        self.cards = cards
 
     def power(self):
         return 9
 
 class FourOfAKind():
     def __init__(self, cards):
-        self.cards == cards
+        self.cards = cards
 
     def power(self):
         return 8

@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from redis_utils import rget, rset
 from settings import LOCAL
 from cards import rule_of_string, shuffled_deck, deal_card, best_five_card_hand, get_card, compare_hands
-from secrets import compare_digest
+from secrets import compare_digest, token_hex
 import random
 import requests
 import json
@@ -22,7 +22,7 @@ class Player(Enum):
 def add_cards(cards, game_id, player=Player.PLAYER):
     key = 'cards' if player == Player.PLAYER else 'dealer_cards'
     if cards == []:
-        return rget(key, game_id=game_id)
+        return json.loads(rget(key, game_id=game_id))
     ret = json.loads(rget(key, game_id=game_id))
     for card in cards:
         ret = add_card(card, game_id, player=player)
@@ -45,16 +45,14 @@ def index():
 @app.route("/new_game", methods=['POST'])
 @cross_origin()
 def new_game():
-    game_id = request.json.get('gameId')
-    if game_id is None:
-        return {'success': False}
+    game_id = token_hex(16)
     deck = shuffled_deck()
     rset('deck', json.dumps([card.to_json()
          for card in deck]), game_id=game_id)
     rset('cards', json.dumps([]), game_id=game_id)
     rset('dealer_cards', json.dumps([]), game_id=game_id)
     rset('finished', 'false', game_id=game_id)
-    return {'success': True}
+    return {'success': True, 'gameId': game_id}
 
 
 @app.route("/current_cards", methods=['POST'])
@@ -65,7 +63,7 @@ def current_cards():
         return {'success': False, 'message': 'Must provide gameId'}
     cards = json.loads(rget('cards', game_id=game_id))
     dealer_cards = json.loads(rget('dealer_cards', game_id=game_id))
-    return {'success': True, 'cards': cards, 'dealerCards': dealer_cards}
+    return {'success': True, 'playerCards': cards, 'dealerCards': dealer_cards}
 
 
 def serialize_list_of_cards(cards):
@@ -82,7 +80,6 @@ def best_hands():
     dealer_cards = json.loads(rget('dealer_cards', game_id=game_id))
     player_hand = best_five_card_hand(cards)
     dealer_hand = best_five_card_hand(dealer_cards)
-    print(dealer_hand)
     return {'success': True, 'playerHand': player_hand and serialize_list_of_cards(player_hand.cards), 'dealerHand': dealer_hand and serialize_list_of_cards(dealer_hand.cards)}
 
 
@@ -94,9 +91,9 @@ def finish_game(player_cards, dealer_cards, deck, game_id):
     dealer_hand = best_five_card_hand(dealer_cards)
     rset('finished', 'true', game_id=game_id)
     if compare_hands(player_hand, dealer_hand) == 1:
-        return {'success': True, 'message': 'You win!', 'playerHand': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+        return {'success': True, 'finished': True, 'won': True, 'message': 'You win!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
     else:
-        return {'success': True, 'message': 'You lose!', 'playerHand': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+        return {'success': True, 'finished': True, 'won': True, 'message': 'You lose!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
 
 
 @app.route("/deal", methods=['POST'])
@@ -119,10 +116,10 @@ def deal():
     rset('deck', json.dumps(deck), game_id=game_id)
     player_cards = add_card(card, game_id)
     dealer_cards = add_cards(dealer_cards, game_id, player=Player.DEALER)
+    dealer_best_hand = best_five_card_hand(dealer_cards)
     if len(player_cards) == 5:
         return finish_game(player_cards, dealer_cards, deck, game_id)
-    return { 'success': True, 'cards': player_cards, 'dealerCards': dealer_cards }
-
+    return { 'success': True, 'finished': False, 'playerCards': player_cards, 'dealerCards': dealer_cards , 'dealerHand': dealer_best_hand and serialize_list_of_cards(dealer_best_hand.cards)}
 
 if __name__ == '__main__':
     print('app running!')

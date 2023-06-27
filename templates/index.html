@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <button id="new-game-btn">New game</button>
+    <div class="how-to-play-wrapper" style="margin-bottom: 10px">
+        <div class="how-to-play" onclick="toggleHowToPlay(event)">
+            <span class="how-to-play-text" id="how-to-play-btn-text">How to play</span>
+            <div class="how-to-play-popup" id="how-to-play-popup">
+                <p> Each turn, you request a subset of cards from the deck. The dealer deals cards until they deal a card that matches your subset, at which point you get that card, and they keep all other cards. </p>
+                <p> The game ends when you have 5 cards. </p>
+                <p> If the dealer has less than 8 cards at this point, they draw up to 8, and then each player players their best 5 card poker hand. </p>
+                <p> The dealer wins ties. </p>
+            </div>
+        </div>
+    </div>
+    <div class="grid" style="margin-top: 10px">
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">A</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">K</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">Q</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">J</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">10</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">9</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">8</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">7</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">6</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">5</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">4</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">3</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">2</span><span
+                class="suit">&spades;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">A</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">K</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">Q</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">J</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">10</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">9</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">8</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">7</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">6</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">5</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">4</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">3</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card black" onclick="toggleCardSelected(this)"><span class="rank">2</span><span
+                class="suit">&clubs;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">A</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">K</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">Q</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">J</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">10</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">9</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">8</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">7</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">6</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">5</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">4</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">3</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">2</span><span
+                class="suit">&hearts;</span></div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">A</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">K</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">Q</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">J</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">10</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">9</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">8</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">7</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">6</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">5</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">4</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">3</span><span class="suit">♦</span>
+        </div>
+        <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">2</span><span class="suit">♦</span>
+        </div>
+    </div>
+    <h2> Player hand </h2>
+    <div class="hand-widget" id="player-hand">
+        <div class="hand"> </div>
+    </div>
+    <h2> Dealer hand </h2>
+    <div class="hand-widget" id="dealer-hand">
+        <div class="hand"> </div>
+    </div>
+
+    <div style="margin-top: 50px; position: absolute; bottom: 0;">
+        <h2> Hotkeys </h2>
+        <h3> Shift plus: </h3>
+        <p> <strong> S|C|H|D </strong> - select all cards of a suit</p>
+        <p> <strong> A|K|Q|J|T|[2-9] </strong> - select all cards of a rank </p>
+        <h3> Ctrl plus alt plus: </h3>
+        <p> <strong> d </strong> - deal a card </p>
+        <p> <strong> n </strong> - new game</p>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+
+
+</html>
