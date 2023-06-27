@@ -213,6 +213,9 @@ function showToast(message, seconds = 3) {
 
     previousToast = toast;
 
+    if (seconds == 0) {
+        return;
+    }
     document.body.appendChild(toast);
 
     setTimeout(function () {
@@ -256,6 +259,8 @@ function newGame() {
     unselectAllCards();
     describeHands();
     updateCards(); 
+
+    showToast('', 0);
 
     fetch(`${URL}/new_game`, makeRequestOptions())
         .then(response => response.json())
