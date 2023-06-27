@@ -262,8 +262,6 @@ function newGame() {
         .then(data => {
             gameId = data.gameId;
         })
-
-    showToast('new game');
 }
 
 function currentCards() {
