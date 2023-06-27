@@ -91,9 +91,9 @@ def finish_game(player_cards, dealer_cards, deck, game_id):
     dealer_hand = best_five_card_hand(dealer_cards)
     rset('finished', 'true', game_id=game_id)
     if compare_hands(player_hand, dealer_hand) == 1:
-        return {'success': True, 'finished': True, 'won': True, 'message': 'You win!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+        return {'success': True, 'finished': True, 'won': True, 'dealerHandDescription': dealer_hand.description(), 'playerHandDescription': player_hand.description(), 'message': 'You win!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
     else:
-        return {'success': True, 'finished': True, 'won': True, 'message': 'You lose!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
+        return {'success': True, 'finished': True, 'won': False, 'dealerHandDescription': dealer_hand.description(), 'playerHandDescription': player_hand.description(), 'message': 'You lose!', 'playerCards': serialize_list_of_cards(player_hand.cards), 'dealerCards': dealer_cards, 'dealerHand': serialize_list_of_cards(dealer_hand.cards)}
 
 
 @app.route("/deal", methods=['POST'])
@@ -119,7 +119,7 @@ def deal():
     dealer_best_hand = best_five_card_hand(dealer_cards)
     if len(player_cards) == 5:
         return finish_game(player_cards, dealer_cards, deck, game_id)
-    return { 'success': True, 'finished': False, 'playerCards': player_cards, 'dealerCards': dealer_cards , 'dealerHand': dealer_best_hand and serialize_list_of_cards(dealer_best_hand.cards)}
+    return { 'success': True, 'finished': False, 'dealerHandDescription': dealer_best_hand and dealer_best_hand.description(), 'playerCards': player_cards, 'dealerCards': dealer_cards , 'dealerHand': dealer_best_hand and serialize_list_of_cards(dealer_best_hand.cards)}
 
 if __name__ == '__main__':
     print('app running!')

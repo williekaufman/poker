@@ -9,8 +9,9 @@
 </head>
 
 <body>
-    <button id="new-game-btn">New game</button>
-    <div class="how-to-play-wrapper" style="margin-bottom: 10px">
+    <button id="new-game-btn" style="margin-right: 5px">New game</button>
+    <button id="deal-card-btn" style="margin-right: 5px">Deal card</button>
+    <div class="how-to-play-wrapper">
         <div class="how-to-play" onclick="toggleHowToPlay(event)">
             <span class="how-to-play-text" id="how-to-play-btn-text">How to play</span>
             <div class="how-to-play-popup" id="how-to-play-popup">
@@ -127,16 +128,16 @@
         <div class="card red" onclick="toggleCardSelected(this)"><span class="rank">2</span><span class="suit">♦</span>
         </div>
     </div>
-    <h2> Player hand </h2>
+    <h2 id="player-hand-description"> player </h2>
     <div class="hand-widget" id="player-hand">
         <div class="hand"> </div>
     </div>
-    <h2> Dealer hand </h2>
+    <h2 id="dealer-hand-description"> dealer </h2>
     <div class="hand-widget" id="dealer-hand">
         <div class="hand"> </div>
     </div>
 
-    <div style="margin-top: 50px; position: absolute; bottom: 0;">
+    <div class="hotkeys" style="position: absolute; bottom: 10px;">
         <h2> Hotkeys </h2>
         <h3> Shift plus: </h3>
         <p> <strong> S|C|H|D </strong> - select all cards of a suit</p>

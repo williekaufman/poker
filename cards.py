@@ -11,7 +11,7 @@ rank_names = {
     7: 7,
     8: 8,
     9: 9,
-    10: "T",
+    10: 10,
     11: "J",
     12: "Q",
     13: "K",
@@ -73,6 +73,9 @@ class StraightFlush():
 
     def power(self):
         return 9
+    
+    def description(self):
+        return f'{rank_names[max(card.rank for card in self.cards)]} high straight flush'
 
 class FourOfAKind():
     def __init__(self, cards):
@@ -80,6 +83,9 @@ class FourOfAKind():
 
     def power(self):
         return 8
+    
+    def description(self):
+        return f'Four {rank_names[self.cards[0].rank]}s'
 
 class FullHouse():
     def __init__(self, cards):
@@ -87,6 +93,9 @@ class FullHouse():
 
     def power(self):
         return 7
+    
+    def description(self):
+        return f'{rank_names[self.cards[0].rank]}s full of {rank_names[self.cards[3].rank]}s'
 
 class Flush():
     def __init__(self, cards):
@@ -94,6 +103,9 @@ class Flush():
 
     def power(self):
         return 6
+    
+    def description(self):
+        return f'{rank_names[max(card.rank for card in self.cards)]} high flush'
 
 class Straight():
     def __init__(self, cards):
@@ -102,12 +114,18 @@ class Straight():
     def power(self):
         return 5
     
+    def description(self):
+        return f'{rank_names[max(card.rank for card in self.cards)]} high straight'
+
 class ThreeOfAKind():
     def __init__(self, cards):
         self.cards = cards
 
     def power(self):
         return 4
+    
+    def description(self):
+        return f'Three {rank_names[self.cards[0].rank]}s'
 
 class TwoPair():
     def __init__(self, cards):
@@ -115,6 +133,9 @@ class TwoPair():
 
     def power(self):
         return 3
+    
+    def description(self):
+        return f'{rank_names[self.cards[0].rank]}s and {rank_names[self.cards[2].rank]}s'
 
 class Pair():
     def __init__(self, cards):
@@ -122,6 +143,9 @@ class Pair():
     
     def power(self):
         return 2
+    
+    def description(self):
+        return f'Pair of {rank_names[self.cards[0].rank]}s'        
 
 class HighCard():
     def __init__(self, cards):
@@ -129,6 +153,9 @@ class HighCard():
 
     def power(self):
         return 1
+    
+    def description(self):
+        return f'{rank_names[max(card.rank for card in self.cards)]} high'
 
 def flush(cards):
     if len(set(c.suit for c in cards)) == 1:
@@ -145,6 +172,9 @@ def straight(cards):
 
 def straight_flush(cards):
     if flush(cards) and straight(cards):
+        if 2 in [card.rank for card in cards] and 14 in [card.rank for card in cards]:
+            cards = sorted([card for card in cards if card.rank != 14], key=lambda card: card.rank, reverse=True) + [card for card in cards if card.rank == 14]
+            return StraightFlush(cards)
         return StraightFlush(sorted(cards, key=lambda card: card.rank, reverse=True))
 
 def four_of_a_kind(cards):
@@ -193,12 +223,28 @@ def high_card(cards):
 
 functions = [straight_flush, four_of_a_kind, full_house, flush, straight, three_of_a_kind, two_pair, pair, high_card]
 
-def best_hand(cards):
+giveup_on = {
+    StraightFlush: four_of_a_kind,
+    FourOfAKind: full_house,
+    FullHouse: flush,
+    Flush: straight,
+    Straight: three_of_a_kind,
+    ThreeOfAKind: two_pair,
+    TwoPair: pair,
+    Pair: high_card,
+    HighCard: None
+}
+
+def best_hand(cards, giveup_on=None):
     for f in functions:
+        if giveup_on and f == giveup_on:
+            return None
         if f(cards):
             return f(cards)
 
 def compare_hands(hand1, hand2):
+    if not hand1 or not hand2:
+        return hand1 or hand2
     if compare(hand1.power(), hand2.power()):
         return compare(hand1.power(), hand2.power())
     return compare_hands_of_same_type(hand1, hand2)
@@ -209,7 +255,7 @@ def best_five_card_hand(cards):
         return None
     best_so_far = None
     for hand in itertools.combinations(cards, 5):
-        if best_so_far is None or compare_hands(best_hand(hand), best_so_far) == 1:
+        if best_so_far is None or compare_hands(best_hand(hand, giveup_on=giveup_on[type(best_so_far)]), best_so_far) == 1:
             best_so_far = best_hand(hand)
     return best_so_far
 

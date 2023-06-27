@@ -14,9 +14,13 @@ let gameId = null;
 
 let selectedCards = [];
 
+let won = null;
+
 let playerHand = document.getElementById('player-hand');
+let playerHandDescription = document.getElementById('player-hand-description');
 
 let dealerHand = document.getElementById('dealer-hand');
+let dealerHandDescription = document.getElementById('dealer-hand-description');
 
 // Yes this is a stupid way to do it but copilot made it really fast lol
 let cards = {
@@ -99,7 +103,6 @@ suits = {
 
 
 function getCardElement(rank, suit, inHand = false) {
-    console.log(rank, suit);
     var cards = document.getElementsByClassName('card');
 
     for (var i = 0; i < cards.length; i++) {
@@ -247,8 +250,10 @@ function newGame() {
     dealerCards = [];
     playerCards = [];
     dealerBestCards = [];
+    won = null;
 
     unselectAllCards();
+    describeHands();
     updateCards(); 
 
     fetch(`${URL}/new_game`, makeRequestOptions())
@@ -296,6 +301,9 @@ function markDealtCards() {
 }
 
 function markDealerBestCards() {
+    if (dealerBestCards.length == 0) {
+        return;
+    }
     for (var card in cards) {
         card = processCard(cards[card]);
         if (includes(card, dealerBestCards)) {
@@ -340,10 +348,35 @@ function updateCards() {
 }
 
 function handleFinished(data) {
-    playerCards = data.playerCards && data.playerCards.map(processCard);
-    dealerCards = data.dealerCards && data.dealerCards.map(processCard);
-    updateCards();
+    dealerBestCards = [...dealerBestCards, ...(data.playerCards.map(processCard))];
+    won = data.won;
     showToast(data.message);
+}
+
+function describeHands(playerDescription, dealerDescription) {
+    console.log(dealerBestCards);
+    if (won === true) {
+        playerHandDescription.classList.add('winning');
+        dealerHandDescription.classList.add('losing');
+    } else if (won === false) {
+        playerHandDescription.classList.add('losing');
+        dealerHandDescription.classList.add('winning');
+    } else {
+        playerHandDescription.classList.remove('winning');
+        dealerHandDescription.classList.remove('winning');
+        playerHandDescription.classList.remove('losing');
+        dealerHandDescription.classList.remove('losing');
+    }
+    if (playerDescription) {
+        playerHandDescription.textContent = 'player: ' + playerDescription;
+    } else {
+        playerHandDescription.textContent = 'player';
+    }
+    if (dealerDescription) {
+        dealerHandDescription.textContent = 'dealer: ' + dealerDescription;
+    } else {
+        dealerHandDescription.textContent = 'dealer';
+    }
 }
 
 function dealCard() {
@@ -356,14 +389,14 @@ function dealCard() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                playerCards = data.playerCards && data.playerCards.map(processCard);
+                dealerCards = data.dealerCards && data.dealerCards.map(processCard);
+                dealerBestCards = data.dealerHand && data.dealerHand.map(processCard);
                 if (data.finished) {
                     handleFinished(data);
-                } else {
-                    playerCards = data.playerCards && data.playerCards.map(processCard);
-                    dealerCards = data.dealerCards && data.dealerCards.map(processCard);
-                    dealerBestCards = data.dealerHand && data.dealerHand.map(processCard);
-                    updateCards();
                 }
+                updateCards();
+                describeHands(data.playerHandDescription, data.dealerHandDescription);
             } else {
                 showToast(data.message);
             }
@@ -374,6 +407,11 @@ function dealCard() {
 const newGameButton = document.getElementById('new-game-btn');
 newGameButton.addEventListener('click', async () => {
     await newGame();
+});
+
+const dealCardButton = document.getElementById('deal-card-btn');
+dealCardButton.addEventListener('click', async () => {
+    await dealCard();
 });
 
 keyboard_ranks = {
