@@ -25,7 +25,6 @@ def card_of_dict(d):
     return Card(d['rank'], d['suit'])
 
 def rule_of_string(s):
-    print(s)
     return Rule([card_of_string(card) for card in s.split()])
 
 class Rule():
