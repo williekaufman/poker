@@ -351,7 +351,7 @@ function updateCards() {
 function handleFinished(data) {
     dealerBestCards = [...dealerBestCards, ...(data.playerCards.map(processCard))];
     won = data.won;
-    showToast(data.message);
+    showToast(data.message, 10);
 }
 
 function describeHands(playerDescription, dealerDescription) {
