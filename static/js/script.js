@@ -441,7 +441,7 @@ function handleKeyDown(e) {
             toggleCards(keyboard_ranks[e.key], 'rank');
         } else if (e.key in suits) {
             toggleCards(suits[e.key], 'suit');
-        } else if (e.key === 'u') {
+        } else if (e.key === 'U') {
             unselectAllCards();
         }
     }
