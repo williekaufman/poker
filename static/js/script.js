@@ -102,13 +102,20 @@ suits = {
     'D': '♦',
 }
 
+classBySuits = {
+    '♠': 'spades',
+    '♣': 'clubs',
+    '♥': 'hearts',
+    '♦': 'diamonds',
+}
+
 
 function getCardElement(rank, suit, inHand = false) {
     var cards = document.getElementsByClassName('card');
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit && card.classList.contains('inHand') == inHand) {
+        if (!card.classList.contains('description') && card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit && card.classList.contains('inHand') == inHand) {
             return card;
         }
     }
@@ -121,7 +128,7 @@ function toggleCards(value, type) {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (card.querySelector(`.${type}`).textContent == value && !card.classList.contains('inHand')) {
+        if (!card.classList.contains('description') && card.querySelector(`.${type}`).textContent == value && !card.classList.contains('inHand')) {
             cards_to_select.push(card);
         }
     }
@@ -134,7 +141,7 @@ function selectCards(cards) {
     
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('selected') && !card.classList.contains('dealt')) {
+        if (!card.classList.contains('selected') && !card.classList.contains('dealer-card')) {
             atleast_one_unselected = true;
         }
     }
@@ -244,7 +251,7 @@ function unselectAllCards() {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (card.classList.contains('selected')) {
+        if (card.classList.contains('selected') && !card.classList.contains('description')) {
             toggleCardSelected(card);
         }
     }
@@ -296,12 +303,15 @@ function includes(card, cards) {
 function markDealtCards() {
     for (var card in cards) {
         card = processCard(cards[card]);
-        if (includes(card, playerCards) || includes(card, dealerCards)) {
+        if (includes(card, dealerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('dealt');
+            card.classList.add('dealer-card');
+        } else if (includes(card, playerCards)) {
+            card = getCardElement(card['rank'], card['suit']);
+            card.classList.add('player-card'); 
         } else {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.remove('dealt');
+            card.classList.remove('dealer-card');
         }
     }
 }
@@ -328,7 +338,7 @@ function updateCards() {
         var cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.classList.add('inHand');
-        cardElement.classList.add(card['suit'] == suits['H'] || card['suit'] == suits['D'] ? 'red' : 'black')
+        cardElement.classList.add(classBySuits[card['suit']]);
         cardElement.innerHTML = `
             <span class="rank">${card['rank']}</span>
             <span class="suit">${card['suit']}</span>
@@ -341,7 +351,7 @@ function updateCards() {
         var cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.classList.add('inHand');
-        cardElement.classList.add(card['suit'] == suits['H'] || card['suit'] == suits['D'] ? 'red' : 'black')
+        cardElement.classList.add(classBySuits[card['suit']]);
         cardElement.innerHTML = `
             <span class="rank">${card['rank']}</span>
             <span class="suit">${card['suit']}</span>

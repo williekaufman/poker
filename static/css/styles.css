@@ -53,11 +53,24 @@
     border-radius: 5px;
 }
 
-.card.red {
-    background-color: rgb(162, 40, 40);
+.card.description {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.card.black {
+.card.clubs {
+    background-color: teal;  
+}
+
+.card.diamonds {
+    background-color: purple;
+}
+
+.card.hearts {
+    background-color: red;
+}
+
+.card.spades {
     background-color: black;
 }
 
@@ -70,12 +83,16 @@
     background-color: blue !important;
 }
 
-.dealt {
+.dealer-card {
   background-color: gray !important;
 }
 
+.player-card {
+  background-color: orange !important;
+}
+
 .dealer-best {
-  background-color: blue !important;
+  background-color: green !important;
 }
 
 .hand {
@@ -108,7 +125,7 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 16px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .how-to-play-popup {
