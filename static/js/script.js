@@ -445,7 +445,7 @@ function handleKeyDown(e) {
             unselectAllCards();
         }
     }
-    if (e.ctrlKey && e.altKey) {
+    if (e.ctrlKey && (e.altKey || e.metaKey)) {
         if (e.key == 'd') {
             e.preventDefault();
             dealCard();
