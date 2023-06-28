@@ -373,14 +373,14 @@ function describeHands(playerDescription, dealerDescription) {
         dealerHandDescription.classList.remove('losing');
     }
     if (playerDescription) {
-        playerHandDescription.textContent = 'player: ' + playerDescription;
+        playerHandDescription.textContent = 'Player: ' + playerDescription;
     } else {
-        playerHandDescription.textContent = 'player';
+        playerHandDescription.textContent = 'Player';
     }
     if (dealerDescription) {
-        dealerHandDescription.textContent = 'dealer: ' + dealerDescription;
+        dealerHandDescription.textContent = 'Dealer: ' + dealerDescription;
     } else {
-        dealerHandDescription.textContent = 'dealer';
+        dealerHandDescription.textContent = 'Dealer';
     }
 }
 
