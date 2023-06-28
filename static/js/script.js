@@ -455,9 +455,7 @@ function handleKeyDown(e) {
         }
     } if (e.key === 'Escape' && howToPlayPopup.style.visibility === 'visible') {
         toggleHowToPlay(e);
-    } if (e.ctrlKey) {
-        console.log(e);
-    }
+    } 
 }
 
 function toggleHowToPlay(event) {
