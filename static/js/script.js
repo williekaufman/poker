@@ -312,6 +312,7 @@ function markDealtCards() {
         } else {
             card = getCardElement(card['rank'], card['suit']);
             card.classList.remove('dealer-card');
+            card.classList.remove('player-card');
         }
     }
 }
