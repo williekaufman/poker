@@ -113,10 +113,19 @@ classBySuits = {
 function getCardElement(rank, suit, inHand = false) {
     var cards = document.getElementsByClassName('card');
 
+    function f(card) {
+        if (card.classList.contains('description')) {
+            return false;
+        } if (card.classList.contains('inHand') != inHand) {
+            return false;
+        }
+        return card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit;
+    }
+    
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('description') && card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit && card.classList.contains('inHand') == inHand) {
-            return card;
+        if (f(card)) {
+            return card
         }
     }
 }
