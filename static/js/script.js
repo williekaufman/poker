@@ -128,7 +128,7 @@ function toggleCards(value, type, all = false) {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (all || !card.classList.contains('description') && card.querySelector(`.${type}`).textContent == value && !card.classList.contains('inHand')) {
+        if (!card.classList.contains('description') && (all || card.querySelector(`.${type}`).textContent == value) && !card.classList.contains('inHand')) {
             cards_to_select.push(card);
         }
     }
