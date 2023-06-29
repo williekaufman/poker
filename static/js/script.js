@@ -475,11 +475,11 @@ function handleKeyDown(e) {
     if (e.ctrlKey) {
         console.log(e);
     }
-    if (e.ctrlKey && (e.altKey || e.metaKey)) {
-        if (e.key == 'd') {
+    if (e.ctrlKey && e.altKey) {
+        if (e.code == 'KeyD') {
             e.preventDefault();
             dealCard();
-        } if (e.key == 'n') {
+        } if (e.code == 'KeyN') {
             e.preventDefault();
             newGame();
         }
