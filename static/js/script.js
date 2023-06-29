@@ -28,6 +28,10 @@ const howToPlayPopup = document.getElementById('how-to-play-popup');
 const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
 
 function setRecord(record) {
+    if (!record || (record.wins == 0 && record.losses == 0)) {
+        document.getElementById('record').textContent = '';
+        return;
+    }
     document.getElementById('record').textContent = `Record: ${record.wins} - ${record.losses}`;
 }
 
