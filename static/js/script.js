@@ -121,14 +121,14 @@ function getCardElement(rank, suit, inHand = false) {
     }
 }
 
-function toggleCards(value, type) {
+function toggleCards(value, type, all = false) {
     var cards = document.getElementsByClassName('card');
 
     cards_to_select = [];
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('description') && card.querySelector(`.${type}`).textContent == value && !card.classList.contains('inHand')) {
+        if (all || !card.classList.contains('description') && card.querySelector(`.${type}`).textContent == value && !card.classList.contains('inHand')) {
             cards_to_select.push(card);
         }
     }
@@ -453,7 +453,7 @@ function handleKeyDown(e) {
         } else if (e.key in suits) {
             toggleCards(suits[e.key], 'suit');
         } else if (e.key === 'U') {
-            unselectAllCards();
+            toggleCards('', '', true);
         }
     }
     if (e.ctrlKey && (e.altKey || e.metaKey)) {
