@@ -41,12 +41,11 @@ def str_add(a, b):
 
 def add_win(player_name):
     current_wins = rget(f'{player_name}:wins', game_id=None) or 0
-    rset(f'{player_name}:wins', str_add(current_wins, 1), game_id=None)
+    rset(f'{player_name}:wins', str_add(current_wins, 1), game_id=None, ex=None)
 
 def add_loss(player_name):
-    print(f'adding loss for {player_name}')
     current_losses = rget(f'{player_name}:losses', game_id=None) or 0
-    rset(f'{player_name}:losses', str_add(current_losses, 1), game_id=None)
+    rset(f'{player_name}:losses', str_add(current_losses, 1), game_id=None, ex=None)
 
 def get_record(player_name):
     if not player_name:
