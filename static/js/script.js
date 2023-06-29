@@ -472,6 +472,9 @@ function handleKeyDown(e) {
             toggleCards('', '', true);
         }
     }
+    if (e.ctrlKey) {
+        console.log(e);
+    }
     if (e.ctrlKey && (e.altKey || e.metaKey)) {
         if (e.key == 'd') {
             e.preventDefault();
