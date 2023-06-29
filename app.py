@@ -112,7 +112,7 @@ def finish_game(player_cards, dealer_cards, deck, game_id, player_name=None):
         'finished': True,
         'dealerHandDescription': dealer_hand.description(),
         'playerHandDescription': player_hand.description(),
-        'playerCards': serialize_list_of_cards(player_hand.cards),
+        'playerCards': player_cards,
         'dealerCards': dealer_cards,
         'dealerHand': serialize_list_of_cards(dealer_hand.cards)
     }
