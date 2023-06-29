@@ -116,9 +116,9 @@ def deal():
     rset('deck', json.dumps(deck), game_id=game_id)
     player_cards = add_card(card, game_id)
     dealer_cards = add_cards(dealer_cards, game_id, player=Player.DEALER)
-    dealer_best_hand = best_five_card_hand(dealer_cards)
     if len(player_cards) == 5:
         return finish_game(player_cards, dealer_cards, deck, game_id)
+    dealer_best_hand = best_five_card_hand(dealer_cards)
     return { 'success': True, 'finished': False, 'dealerHandDescription': dealer_best_hand and dealer_best_hand.description(), 'playerCards': player_cards, 'dealerCards': dealer_cards , 'dealerHand': dealer_best_hand and serialize_list_of_cards(dealer_best_hand.cards)}
 
 if __name__ == '__main__':
