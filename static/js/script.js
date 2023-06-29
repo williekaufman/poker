@@ -1,5 +1,7 @@
 URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
 
+URL = 'http://localhost:5001/'
+
 let playerCards = []
 
 let dealerCards = []
@@ -14,6 +16,8 @@ let selectedCards = [];
 
 let won = null;
 
+let playerNameInput = document.getElementById('player-name-input');
+
 let playerHand = document.getElementById('player-hand');
 let playerHandDescription = document.getElementById('player-hand-description');
 
@@ -22,6 +26,10 @@ let dealerHandDescription = document.getElementById('dealer-hand-description');
 
 const howToPlayPopup = document.getElementById('how-to-play-popup');
 const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
+
+function setRecord(record) {
+    document.getElementById('record').textContent = `Record: ${record.wins} - ${record.losses}`;
+}
 
 // Yes this is a stupid way to do it but copilot made it really fast lol
 let cards = {
@@ -121,7 +129,7 @@ function getCardElement(rank, suit, inHand = false) {
         }
         return card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit;
     }
-    
+
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
         if (f(card)) {
@@ -139,7 +147,7 @@ function toggleCards(value, type, all = false) {
         if (card.classList.contains('description') || card.classList.contains('inHand')) {
             return false;
         }
-        return all || card.querySelector(`.${type}`).textContent == value; 
+        return all || card.querySelector(`.${type}`).textContent == value;
     }
 
     for (var i = 0; i < cards.length; i++) {
@@ -154,7 +162,7 @@ function toggleCards(value, type, all = false) {
 
 function selectCards(cards) {
     atleast_one_unselected = false;
-    
+
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
         if (!card.classList.contains('selected') && !card.classList.contains('dealer-card')) {
@@ -208,11 +216,11 @@ function toggleCardSelected(card) {
 
 // Obsolete
 function selectCardWithIndex(index) {
-   if (selectedCards.includes(index)) {
-         selectedCards.splice(selectedCards.indexOf(index), 1);
+    if (selectedCards.includes(index)) {
+        selectedCards.splice(selectedCards.indexOf(index), 1);
     } else {
         selectedCards.push(index);
-    } 
+    }
 }
 
 function selectedCardsQueryArg() {
@@ -253,9 +261,9 @@ function processCard(card) {
     }
 }
 
-function makeRequestOptions(body) {
+function makeRequestOptions(body, method = 'POST') {
     return {
-        method: 'POST',
+        method,
         mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body,
@@ -281,7 +289,7 @@ function newGame() {
 
     unselectAllCards();
     describeHands();
-    updateCards(); 
+    updateCards();
 
     showToast('', 0);
 
@@ -324,7 +332,7 @@ function markDealtCards() {
             card.classList.add('dealer-card');
         } else if (includes(card, playerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('player-card'); 
+            card.classList.add('player-card');
         } else {
             card = getCardElement(card['rank'], card['suit']);
             card.classList.remove('dealer-card');
@@ -383,6 +391,7 @@ function updateCards() {
 function handleFinished(data) {
     dealerBestCards = [...dealerBestCards, ...(data.playerCards.map(processCard))];
     won = data.won;
+    setRecord(data.record);
     showToast(data.message, 10);
 }
 
@@ -415,6 +424,7 @@ function dealCard() {
     const body = JSON.stringify({
         gameId,
         rule: selectedCardsQueryArg(),
+        playerName: playerNameInput.value,
     });
 
     fetch(`${URL}/deal`, makeRequestOptions(body))
@@ -433,7 +443,35 @@ function dealCard() {
                 showToast(data.message);
             }
         }
-    );
+        );
+}
+
+function getRecord() {
+    const body = JSON.stringify({
+        playerName: playerNameInput.value,
+    });
+
+    fetch(`${URL}/record`, makeRequestOptions(body))
+        .then(response => response.json())
+        .then(data => {
+            if (data['success']) {
+                setRecord(data.record);
+            }
+        }
+        );
+}
+
+function deleteRecord() {
+    const body = JSON.stringify({
+        playerName: playerNameInput.value,
+    });
+
+    fetch(`${URL}/record`, makeRequestOptions(body, 'DELETE'))
+        .then(response => response.json())
+        .then(data => {
+            setRecord(data.record);
+        }
+        );
 }
 
 const newGameButton = document.getElementById('new-game-btn');
@@ -444,6 +482,11 @@ newGameButton.addEventListener('click', async () => {
 const dealCardButton = document.getElementById('deal-card-btn');
 dealCardButton.addEventListener('click', async () => {
     await dealCard();
+});
+
+const deleteRecordButton = document.getElementById('delete-record-btn');
+deleteRecordButton.addEventListener('click', async () => {
+    await deleteRecord();
 });
 
 keyboard_ranks = {
@@ -470,41 +513,77 @@ function handleKeyDown(e) {
             toggleCards(suits[e.key], 'suit');
         } else if (e.key === 'U') {
             toggleCards('', '', true);
+        } else if (e.key === 'P') {
+            e.preventDefault();
+            playerNameInput.focus();
         }
     }
-    if (e.ctrlKey) {
-        console.log(e);
-    }
     if (e.ctrlKey && e.altKey) {
-        if (e.code == 'KeyD') {
+        if (e.code === 'KeyD') {
             e.preventDefault();
             dealCard();
-        } if (e.code == 'KeyN') {
+        } if (e.code === 'KeyN') {
             e.preventDefault();
             newGame();
+        } if (e.code === 'KeyR') {
+            e.preventDefault();
+            deleteRecord();
         }
     } if (e.key === 'Escape' && howToPlayPopup.style.visibility === 'visible') {
         toggleHowToPlay(e);
-    } 
+    }
 }
 
 function toggleHowToPlay(event) {
     event.stopPropagation();
     if (howToPlayPopup.style.visibility === 'hidden') {
-      howToPlayPopup.style.visibility = 'visible';
-      howToPlayPopup.style.opacity = '1';
-      howToPlayBtnText.textContent = 'Close how to play';
+        howToPlayPopup.style.visibility = 'visible';
+        howToPlayPopup.style.opacity = '1';
+        howToPlayBtnText.textContent = 'Close how to play';
     } else {
-      howToPlayPopup.style.visibility = 'hidden';
-      howToPlayPopup.style.opacity = '0';
-      howToPlayBtnText.textContent = 'How to play';
+        howToPlayPopup.style.visibility = 'hidden';
+        howToPlayPopup.style.opacity = '0';
+        howToPlayBtnText.textContent = 'How to play';
     }
-  }
+}
 
 document.addEventListener('keydown', handleKeyDown);
 
 document.addEventListener('DOMContentLoaded', function () {
     howToPlayPopup.style.visibility = 'hidden';
 });
+
+function submitPlayerName() {
+    localStorage.setItem('personalGoatPlayerName', playerNameInput.value);
+    if (playerNameInput.value === '') {
+        document.getElementById('record').textContent = '';
+        return;
+    }
+    getRecord();
+}
+
+playerNameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        submitPlayerName();
+    } if (e.key === 'Escape') {
+        e.preventDefault();
+        playerNameInput.blur();
+    }
+})
+
+playerNameInput.addEventListener('focus', function (e) {
+    document.removeEventListener('keydown', handleKeyDown);
+})
+
+playerNameInput.addEventListener('blur', function (e) {
+    document.addEventListener('keydown', handleKeyDown);
+    submitPlayerName();
+})
+
+if (localStorage.getItem('personalGoatPlayerName')) {
+    playerNameInput.value = localStorage.getItem('personalGoatPlayerName');
+    getRecord();
+}
 
 newGame();

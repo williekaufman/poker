@@ -9,8 +9,15 @@
 </head>
 
 <body>
-        <button id="new-game-btn" style="margin-right: 5px">New game</button>
-        <button id="deal-card-btn" style="margin-right: 5px">Deal card</button>
+        <div> 
+                <button id="new-game-btn" style="margin-right: 5px">New game</button>
+                <button id="deal-card-btn" style="margin-right: 5px">Deal card</button>
+        </div>
+        <div style="margin-top: 10px"> 
+                <input type="text" id="player-name-input" placeholder="Player name" style="margin-right: 5px">
+                <span id="record" style="margin-right: 5px"></span>
+        </div>
+        <button id="delete-record-btn" style="margin-top: 10px">Set record to 0 - 0</button>
         <div class="how-to-play-wrapper">
                 <div class="how-to-play" onclick="toggleHowToPlay(event)">
                         <span class="how-to-play-text" id="how-to-play-btn-text">How to play</span>
@@ -32,9 +39,12 @@
 
                                 <p> Coloring key </p>
                                 <grid style="gap: 10px; display: grid; grid-template-columns: repeat(13, 1fr);">
-                                        <p> <span class="card spades description" style="display: flex">&spades;</span></p>
-                                        <p> <span class="card clubs description" style="display: flex">&clubs;</span></p>
-                                        <p> <span class="card hearts description" style="display: flex">&hearts;</span></p>
+                                        <p> <span class="card spades description" style="display: flex">&spades;</span>
+                                        </p>
+                                        <p> <span class="card clubs description" style="display: flex">&clubs;</span>
+                                        </p>
+                                        <p> <span class="card hearts description" style="display: flex">&hearts;</span>
+                                        </p>
                                         <p> <span class="card diamonds description" style="display: flex">♦</span></p>
                                 </grid>
                                 <p> <span class="card player-card description"> </span> In player's hand </p>
@@ -173,11 +183,11 @@
                                 class="suit">♦</span>
                 </div>
         </div>
-        <h2 id="player-hand-description"> player </h2>
+        <h2 id="player-hand-description"> Player </h2>
         <div class="hand-widget" id="player-hand">
                 <div class="hand"> </div>
         </div>
-        <h2 id="dealer-hand-description"> dealer </h2>
+        <h2 id="dealer-hand-description"> Dealer </h2>
         <div class="hand-widget" id="dealer-hand">
                 <div class="hand"> </div>
         </div>
@@ -188,9 +198,11 @@
                 <p> <strong> S|C|H|D </strong> - select all cards of a suit</p>
                 <p> <strong> A|K|Q|J|T|[2-9] </strong> - select all cards of a rank </p>
                 <p> <strong> U </strong> - select all cards </p>
+                <p> <strong> P </strong> - focus player name </p>
                 <h3> Ctrl plus alt plus: </h3>
                 <p> <strong> d </strong> - deal a card </p>
                 <p> <strong> n </strong> - new game</p>
+                <p> <strong> r </strong> - reset record </p>
         </div>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
