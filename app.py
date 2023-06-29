@@ -150,6 +150,8 @@ def deal():
     if game_id is None:
         return {'success': False, 'message': 'Must provide gameId'}
     deck = json.loads(rget('deck', game_id=game_id))
+    if deck is None:
+        return {'success': False, 'message': 'Invalid gameId - start a new game'}
     card, dealer_cards, deck = deal_card(deck, rule)
     if card is None:
         return {'success': False, 'message': "Rule doesn't match any cards left in deck"}
