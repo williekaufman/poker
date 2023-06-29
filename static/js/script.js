@@ -6,7 +6,7 @@ let playerCards = []
 
 let dealerCards = []
 
-let dealerBestCards = [];
+let dealerBestHand = [];
 
 let previousToast = null;
 
@@ -23,6 +23,8 @@ let playerHandDescription = document.getElementById('player-hand-description');
 
 let dealerHand = document.getElementById('dealer-hand');
 let dealerHandDescription = document.getElementById('dealer-hand-description');
+
+let highlightDealerBestHand = document.getElementById('highlight-dealer-best-hand');
 
 const howToPlayPopup = document.getElementById('how-to-play-popup');
 const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
@@ -288,7 +290,7 @@ function unselectAllCards() {
 function newGame() {
     dealerCards = [];
     playerCards = [];
-    dealerBestCards = [];
+    dealerBestHand = [];
     won = null;
 
     unselectAllCards();
@@ -345,16 +347,25 @@ function markDealtCards() {
     }
 }
 
-function markDealerBestCards() {
-    if (!dealerBestCards || dealerBestCards.length == 0) {
+function markDealerBestHand() {
+    if (!dealerBestHand || dealerBestHand.length == 0) {
         return;
     }
+    
+    function f(card) {
+        if (highlightDealerBestHand.checked) {
+            card.classList.add('dealer-best');
+        } else {
+            card.classList.remove('dealer-best');
+        }
+    }
+
     for (var card in cards) {
         card = processCard(cards[card]);
-        if (includes(card, dealerBestCards)) {
+        if (includes(card, dealerBestHand)) {
             card = getCardElement(card['rank'], card['suit'], true);
-            card.classList.add('dealer-best');
-        }
+            f(card);
+        } 
     }
 }
 
@@ -389,11 +400,10 @@ function updateCards() {
     }
 
     markDealtCards();
-    markDealerBestCards();
+    markDealerBestHand();
 }
 
 function handleFinished(data) {
-    dealerBestCards = [...dealerBestCards, ...(data.playerCards.map(processCard))];
     won = data.won;
     setRecord(data.record);
     showToast(data.message, 10);
@@ -437,7 +447,7 @@ function dealCard() {
             if (data.success) {
                 playerCards = data.playerCards && data.playerCards.map(processCard);
                 dealerCards = data.dealerCards && data.dealerCards.map(processCard);
-                dealerBestCards = data.dealerHand && data.dealerHand.map(processCard);
+                dealerBestHand = data.dealerHand && data.dealerHand.map(processCard);
                 if (data.finished) {
                     handleFinished(data);
                 }
@@ -589,5 +599,15 @@ if (localStorage.getItem('personalGoatPlayerName')) {
     playerNameInput.value = localStorage.getItem('personalGoatPlayerName');
     getRecord();
 }
+
+if (localStorage.getItem('highlightDealerBestHand')) {
+    highlightDealerBestHand.checked = localStorage.getItem('highlightDealerBestHand') === 'true';
+    markDealerBestHand();
+}
+
+highlightDealerBestHand.addEventListener('change', function (e) {
+    localStorage.setItem('highlightDealerBestHand', highlightDealerBestHand.checked);
+    markDealerBestHand();
+})
 
 newGame();
