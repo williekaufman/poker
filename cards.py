@@ -114,6 +114,8 @@ class Straight():
         return 5
     
     def description(self):
+        if 2 in [card.rank for card in self.cards] and 14 in [card.rank for card in self.cards]:
+            return f'5 high straight'
         return f'{rank_names[max(card.rank for card in self.cards)]} high straight'
 
 class ThreeOfAKind():
