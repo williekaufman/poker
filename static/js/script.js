@@ -126,9 +126,16 @@ function toggleCards(value, type, all = false) {
 
     cards_to_select = [];
 
+    function f(card) {
+        if (card.classList.contains('description') || card.classList.contains('inHand')) {
+            return false;
+        }
+        return all || card.querySelector(`.${type}`).textContent == value; 
+    }
+
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('description') && (all || card.querySelector(`.${type}`).textContent == value) && !card.classList.contains('inHand')) {
+        if (f(card)) {
             cards_to_select.push(card);
         }
     }
