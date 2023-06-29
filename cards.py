@@ -12,10 +12,10 @@ rank_names = {
     8: 8,
     9: 9,
     10: 10,
-    11: "J",
-    12: "Q",
-    13: "K",
-    14: "A"
+    11: "Jack",
+    12: "Queen",
+    13: "King",
+    14: "Ace"
 }
 
 def card_of_string(s):
