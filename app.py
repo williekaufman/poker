@@ -61,6 +61,10 @@ def get_record(player_name):
         'losses': get_record_helper(player_name, Result.LOSS)
     }
 
+def add_ip_address(address):
+    current_count = int(rget(f'ip_address:{address}', game_id=None) or 0)
+    rset(f'ip_address:{address}', current_count + 1, game_id=None, ex=None)
+
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
@@ -71,6 +75,7 @@ def index():
 def new_game():
     game_id = token_hex(16)
     deck = shuffled_deck()
+    add_ip_address(request.remote_addr)
     rset('deck', json.dumps([card.to_json()
          for card in deck]), game_id=game_id)
     rset('cards', json.dumps([]), game_id=game_id)
