@@ -8,24 +8,33 @@ def get_suit(suit):
 def rule(rank):
     return ' '.join([str(rank) + suit for rank in range(rank, 15) for suit in "SHCD"])
 
-trials = 1
+def card_matching(playerCards):
+    return ' '.join([str(rank) + suit for rank in set([card['rank'] for card in playerCards]) for suit in "SHCD"])
 
-d = {i: 0 for i in range(2, 100)}
+trials = 100
 
-def run_trial(rank):
+wins = 0
+
+def run_trial():
+    global trials
     game = requests.post('http://localhost:5001/new_game',
                      json={}).json()['gameId']
-    first_card = requests.post('http://localhost:5001/deal', json={'gameId': game, 'rule': rule(rank)}).json()['playerCards'][0]
-    for _ in range(4):
-        response = requests.post('http://localhost:5001/deal', json={'gameId': game, 'rule': get_suit(first_card['suit'])}).json()
-    return len(response['dealerCards'])
+    for _ in range(3):
+        response = requests.post('http://localhost:5001/deal',
+                             json={'gameId': game, 'rule': rule(2)}).json()
+    player_cards = response['playerCards']
+    for _ in range(2):
+        response = requests.post('http://localhost:5001/deal', json={'gameId': game, 'rule': card_matching(player_cards)}).json()
+        if 'playerCards' not in response:
+            trials -= 1
+            return False
+        player_cards = response['playerCards']
+    if 'won' not in response:
+        print('failed')
+        return False
+    return response['won']
 
 for j in range(trials):
-    result = run_trial(2)
-    d[result] += 1
+    wins += run_trial()
 
-d = { i : d[i] / trials for i in range(2, 100)}
-
-print(sum([k * v for k, v in d.items()]))
-
-print(d)
+print(wins, trials, wins / trials)
