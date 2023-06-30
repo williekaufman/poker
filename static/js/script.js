@@ -317,7 +317,7 @@ function newGame() {
 
     showToast('', 0);
 
-    fetchWrapper(`${URL}/new_game`, {}, 'POST')
+    fetchWrapper(`${URL}/new_game`, null, 'POST')
         .then(response => response.json())
         .then(data => {
             gameId = data.gameId;
