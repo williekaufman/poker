@@ -171,7 +171,7 @@ function selectCards(cards) {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('selected') && !card.classList.contains('dealerCard')) {
+        if (!card.classList.contains('selected') && !card.classList.contains('dealer-card')) {
             atleast_one_unselected = true;
         }
     }
@@ -354,14 +354,14 @@ function markDealtCards() {
         card = processCard(cards[card]);
         if (includes(card, dealerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('dealerCard');
+            card.classList.add('dealer-card');
         } else if (includes(card, playerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('playerCard');
+            card.classList.add('player-card');
         } else {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.remove('dealerCard');
-            card.classList.remove('playerCard');
+            card.classList.remove('dealer-card');
+            card.classList.remove('player-card');
         }
     }
 }
@@ -516,7 +516,7 @@ function expectedDealerCards() {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (card.classList.contains('playerCard') || card.classList.contains('dealerCard') || card.classList.contains('description') || card.classList.contains('in-hand')) {
+        if (card.classList.contains('player-card') || card.classList.contains('dealer-card') || card.classList.contains('description') || card.classList.contains('in-hand')) {
             continue;
         } else
             if (card.classList.contains('selected')) {
