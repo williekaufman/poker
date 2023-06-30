@@ -201,9 +201,11 @@ def get_record_by_hand_type_helper(key, result):
 
 def get_record_by_hand_type(hand_type):
     key = f'{player_hand_type_prefix}{hand_type}'
+    wins, losses = get_record_by_hand_type_helper(key, Result.WIN), get_record_by_hand_type_helper(key, Result.LOSS)
     return {
-        'wins': get_record_by_hand_type_helper(key, Result.WIN), 
-        'losses': get_record_by_hand_type_helper(key, Result.LOSS)
+        'wins': wins,
+        'losses': losses,
+        'percentage': wins / (wins + losses) if wins + losses > 0 else 0 
     }
 
 @app.route("/record/by_hand_type", methods=['GET'])
