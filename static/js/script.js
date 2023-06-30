@@ -130,7 +130,7 @@ function getCardElement(rank, suit, inHand = false) {
     function f(card) {
         if (card.classList.contains('description')) {
             return false;
-        } if (card.classList.contains('inHand') != inHand) {
+        } if (card.classList.contains('in-hand') != inHand) {
             return false;
         }
         return card.querySelector('.rank').textContent == rank && card.querySelector('.suit').textContent == suit;
@@ -150,7 +150,7 @@ function toggleCards(value, type, all = false) {
     cards_to_select = [];
 
     function f(card) {
-        if (card.classList.contains('description') || card.classList.contains('inHand')) {
+        if (card.classList.contains('description') || card.classList.contains('in-hand')) {
             return false;
         }
         return all || card.querySelector(`.${type}`).textContent == value;
@@ -171,7 +171,7 @@ function selectCards(cards) {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (!card.classList.contains('selected') && !card.classList.contains('dealer-card')) {
+        if (!card.classList.contains('selected') && !card.classList.contains('dealerCard')) {
             atleast_one_unselected = true;
         }
     }
@@ -207,6 +207,14 @@ function unselectCard(card) {
     toggleCardSelected(card);
 }
 
+function updateDealCardButton() {
+    let c = expectedDealerCards();
+
+    c = c ? Math.round(c * 10) / 10 : '';
+
+    dealCardButton.textContent = 'Deal card' + (c === '' ? '' : ' (' + c + ')');
+}
+
 function toggleCardSelected(card) {
     card.classList.toggle('selected');
 
@@ -218,12 +226,8 @@ function toggleCardSelected(card) {
         var position = selectedCards.indexOf(index + 1);
         selectedCards.splice(position, 1);
     }
-   
-    let c = expectedDealerCards();
-   
-    c = c ? Math.round(c * 10) / 10 : '';
 
-    dealCardButton.textContent = 'Deal card' + (c === '' ? '' : ' (' + c + ')');
+    updateDealCardButton();
 }
 
 function selectedCardsQueryArg() {
@@ -350,14 +354,14 @@ function markDealtCards() {
         card = processCard(cards[card]);
         if (includes(card, dealerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('dealer-card');
+            card.classList.add('dealerCard');
         } else if (includes(card, playerCards)) {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.add('player-card');
+            card.classList.add('playerCard');
         } else {
             card = getCardElement(card['rank'], card['suit']);
-            card.classList.remove('dealer-card');
-            card.classList.remove('player-card');
+            card.classList.remove('dealerCard');
+            card.classList.remove('playerCard');
         }
     }
 }
@@ -392,7 +396,7 @@ function updateCards() {
         var card = playerCards[i];
         var cardElement = document.createElement('div');
         cardElement.classList.add('card');
-        cardElement.classList.add('inHand');
+        cardElement.classList.add('in-hand');
         cardElement.classList.add(classBySuits[card['suit']]);
         cardElement.innerHTML = `
             <span class="rank">${card['rank']}</span>
@@ -405,7 +409,7 @@ function updateCards() {
         var card = dealerCards[i];
         var cardElement = document.createElement('div');
         cardElement.classList.add('card');
-        cardElement.classList.add('inHand');
+        cardElement.classList.add('in-hand');
         cardElement.classList.add(classBySuits[card['suit']]);
         cardElement.innerHTML = `
             <span class="rank">${card['rank']}</span>
@@ -416,6 +420,7 @@ function updateCards() {
 
     markDealtCards();
     markDealerBestHand();
+    updateDealCardButton();
 }
 
 function handleFinished(data) {
@@ -511,15 +516,20 @@ function expectedDealerCards() {
 
     for (var i = 0; i < cards.length; i++) {
         var card = cards[i];
-        if (card.classList.contains('selected') && !card.classList.contains('description') && !card.classList.contains('inHand')) {
-            selected++;
-        }
-        if (!card.classList.contains('description') && !card.classList.contains('inHand')) {
-            total++;
-        }
+        if (card.classList.contains('playerCard') || card.classList.contains('dealerCard') || card.classList.contains('description') || card.classList.contains('in-hand')) {
+            continue;
+        } else
+            if (card.classList.contains('selected')) {
+                selected++;
+            }
+            else {
+                total++;
+            }
     }
-   
-    return (!selected || !total) ? 0 : (total + 1) / (selected + 1) - 1;
+
+    console.log(selected, total);
+
+    return selected ? (total + selected + 1) / (selected + 1) - 1 : 0;
 }
 
 const newGameButton = document.getElementById('new-game-btn');
