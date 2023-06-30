@@ -181,7 +181,6 @@ def deal():
 @cross_origin()
 def record():
     player_name = request.args.get('playerName')
-    print(player_name)
     if not player_name:
         return {'success': False, 'message': 'Must provide playerName'}
     return {'success': True, 'record': get_record(player_name)}
