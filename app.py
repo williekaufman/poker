@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, make_response, render_template
 from flask_cors import CORS, cross_origin
 from redis_utils import rget, rset
-from settings import LOCAL
+from settings import LOCAL, player_hand_type_prefix
 from cards import rule_of_string, shuffled_deck, deal_card, best_five_card_hand, get_card, compare_hands
 from secrets import compare_digest, token_hex
 import random
@@ -118,6 +118,7 @@ def finish_game(player_cards, dealer_cards, deck, game_id, player_name=None):
     }
     if compare_hands(player_hand, dealer_hand) == 1:
         player_name and add_win(player_name)
+        add_win(player_hand_type_prefix + player_hand.type())
         record = get_record(player_name)
         return {
             **ret,
@@ -127,6 +128,7 @@ def finish_game(player_cards, dealer_cards, deck, game_id, player_name=None):
         }
     else:
         player_name and add_loss(player_name)
+        add_loss(player_hand_type_prefix + player_hand.type())
         record = get_record(player_name)
         return {
             **ret,

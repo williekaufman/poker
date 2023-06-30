@@ -76,6 +76,9 @@ class StraightFlush():
     def description(self):
         return f'{rank_names[max(card.rank for card in self.cards)]} high straight flush'
 
+    def type(self):
+        return 'Straight Flush'
+
 class FourOfAKind():
     def __init__(self, cards):
         self.cards = cards
@@ -85,6 +88,9 @@ class FourOfAKind():
     
     def description(self):
         return f'Four {rank_names[self.cards[0].rank]}s'
+
+    def type(self):
+        return 'Four of a Kind'
 
 class FullHouse():
     def __init__(self, cards):
@@ -96,6 +102,9 @@ class FullHouse():
     def description(self):
         return f'{rank_names[self.cards[0].rank]}s full of {rank_names[self.cards[3].rank]}s'
 
+    def type(self):
+        return 'Full House'
+
 class Flush():
     def __init__(self, cards):
         self.cards = cards
@@ -105,6 +114,9 @@ class Flush():
     
     def description(self):
         return f'{rank_names[max(card.rank for card in self.cards)]} high flush'
+
+    def type(self):
+        return 'Flush'
 
 class Straight():
     def __init__(self, cards):
@@ -118,6 +130,9 @@ class Straight():
             return f'5 high straight'
         return f'{rank_names[max(card.rank for card in self.cards)]} high straight'
 
+    def type(self):
+        return 'Straight'
+
 class ThreeOfAKind():
     def __init__(self, cards):
         self.cards = cards
@@ -127,6 +142,9 @@ class ThreeOfAKind():
     
     def description(self):
         return f'Three {rank_names[self.cards[0].rank]}s'
+
+    def type(self):
+        return 'Three of a Kind'
 
 class TwoPair():
     def __init__(self, cards):
@@ -138,6 +156,9 @@ class TwoPair():
     def description(self):
         return f'{rank_names[self.cards[0].rank]}s and {rank_names[self.cards[2].rank]}s'
 
+    def type(self):
+        return 'Two Pair'
+    
 class Pair():
     def __init__(self, cards):
         self.cards = cards
@@ -148,6 +169,9 @@ class Pair():
     def description(self):
         return f'Pair of {rank_names[self.cards[0].rank]}s'        
 
+    def type(self):
+        return 'Pair'
+    
 class HighCard():
     def __init__(self, cards):
         self.cards = cards
@@ -157,6 +181,9 @@ class HighCard():
     
     def description(self):
         return f'{rank_names[max(card.rank for card in self.cards)]} high'
+
+    def type(self):
+        return 'High Card'
 
 def flush(cards):
     if len(set(c.suit for c in cards)) == 1:
