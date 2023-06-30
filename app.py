@@ -213,7 +213,7 @@ def record_by_hand_type():
     ret = []
     for hand_type in ['straight_flush', 'four_of_a_kind', 'full_house', 'flush', 'straight', 'three_of_a_kind', 'two_pair', 'pair', 'high_card']:
         ret.append({'type': hand_type, **get_record_by_hand_type(hand_type)}) 
-    return {'success': True, 'record': ret}
+    return {'success': True, 'record': sorted(ret, key=lambda x: x['percentage'], reverse=True)}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001 if LOCAL else 5002)
