@@ -1,6 +1,6 @@
-URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
+// URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
 
-// URL = 'http://localhost:5001/'
+URL = 'http://localhost:5001/'
 
 let playerCards = []
 
@@ -268,13 +268,31 @@ function processCard(card) {
 }
 
 function makeRequestOptions(body, method = 'POST') {
+    if (method == 'GET') {
+        return {
+            method,
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+        };
+    }
+
     return {
         method,
         mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
-        body,
+        body: JSON.stringify(body),
     };
 }
+
+function fetchWrapper(url, body, method = 'POST') {
+    if (method == 'GET') {
+        for (var key in body) {
+            url = `${url}?${key}=${body[key]}`;
+        }
+    }
+    return fetch(url, makeRequestOptions(body, method));
+}
+
 
 function unselectAllCards() {
     var cards = document.getElementsByClassName('card');
@@ -299,7 +317,7 @@ function newGame() {
 
     showToast('', 0);
 
-    fetch(`${URL}/new_game`, makeRequestOptions())
+    fetchWrapper(`${URL}/new_game`, {}, 'POST')
         .then(response => response.json())
         .then(data => {
             gameId = data.gameId;
@@ -307,11 +325,11 @@ function newGame() {
 }
 
 function currentCards() {
-    const body = JSON.stringify({
+    const body = {
         gameId,
-    });
+    };
 
-    fetch(`${URL}/current_cards`, makeRequestOptions(body))
+    fetchWrapper(`${URL}/current_cards`, body, 'GET')
         .then(response => response.json())
         .then(data => {
             playerCards = data.playerCards;
@@ -435,13 +453,13 @@ function describeHands(playerDescription, dealerDescription) {
 }
 
 function dealCard() {
-    const body = JSON.stringify({
+    const body = {
         gameId,
         rule: selectedCardsQueryArg(),
         playerName: playerNameInput.value,
-    });
+    };
 
-    fetch(`${URL}/deal`, makeRequestOptions(body))
+    fetchWrapper(`${URL}/deal`, body)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -461,11 +479,11 @@ function dealCard() {
 }
 
 function getRecord() {
-    const body = JSON.stringify({
+    const body = {
         playerName: playerNameInput.value,
-    });
+    };
 
-    fetch(`${URL}/record`, makeRequestOptions(body))
+    fetchWrapper(`${URL}/record`, body, 'GET')
         .then(response => response.json())
         .then(data => {
             if (data['success']) {
@@ -476,11 +494,11 @@ function getRecord() {
 }
 
 function deleteRecord() {
-    const body = JSON.stringify({
+    const body = {
         playerName: playerNameInput.value,
-    });
+    };
 
-    fetch(`${URL}/record`, makeRequestOptions(body, 'DELETE'))
+    fetchWrapper(`${URL}/record`, body, 'DELETE')
         .then(response => response.json())
         .then(data => {
             setRecord(data.record);
