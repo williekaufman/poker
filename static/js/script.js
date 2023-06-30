@@ -1,6 +1,6 @@
-// URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
+URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
 
-URL = 'http://localhost:5001/'
+// URL = 'http://localhost:5001/'
 
 let playerCards = []
 
