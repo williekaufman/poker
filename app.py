@@ -84,7 +84,7 @@ def new_game():
     return {'success': True, 'gameId': game_id}
 
 
-@app.route("/current_cards", methods=['GET'])
+@app.route("/current_cards", methods=['POST'])
 @cross_origin()
 def current_cards():
     game_id = request.json.get('gameId')
@@ -99,7 +99,7 @@ def serialize_list_of_cards(cards):
     return [card.to_json() for card in cards]
 
 
-@app.route("/best_hands", methods=['GET'])
+@app.route("/best_hands", methods=['POST'])
 @cross_origin()
 def best_hands():
     game_id = request.json.get('gameId')
@@ -177,7 +177,7 @@ def deal():
     dealer_best_hand = best_five_card_hand(dealer_cards)
     return { 'success': True, 'finished': False, 'dealerHandDescription': dealer_best_hand and dealer_best_hand.description(), 'playerCards': player_cards, 'dealerCards': dealer_cards , 'dealerHand': dealer_best_hand and serialize_list_of_cards(dealer_best_hand.cards)}
 
-@app.route("/record", methods=['GET'])
+@app.route("/record", methods=['POST'])
 @cross_origin()
 def record():
     player_name = request.json.get('playerName')
@@ -205,7 +205,7 @@ def get_record_by_hand_type(hand_type):
         'losses': get_record_by_hand_type_helper(key, Result.LOSS)
     }
 
-@app.route("/record/by_hand_type", methods=['GET'])
+@app.route("/record/by_hand_type", methods=['POST'])
 @cross_origin()
 def record_by_hand_type():
     ret = []

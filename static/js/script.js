@@ -311,7 +311,7 @@ function currentCards() {
         gameId,
     });
 
-    fetch(`${URL}/current_cards`, makeRequestOptions(body, 'GET'))
+    fetch(`${URL}/current_cards`, makeRequestOptions(body))
         .then(response => response.json())
         .then(data => {
             playerCards = data.playerCards;
@@ -465,7 +465,7 @@ function getRecord() {
         playerName: playerNameInput.value,
     });
 
-    fetch(`${URL}/record`, makeRequestOptions(body, 'GET'))
+    fetch(`${URL}/record`, makeRequestOptions(body))
         .then(response => response.json())
         .then(data => {
             if (data['success']) {
