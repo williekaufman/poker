@@ -218,15 +218,12 @@ function toggleCardSelected(card) {
         var position = selectedCards.indexOf(index + 1);
         selectedCards.splice(position, 1);
     }
-}
+   
+    let c = expectedDealerCards();
+   
+    c = c ? Math.round(c * 10) / 10 : '';
 
-// Obsolete
-function selectCardWithIndex(index) {
-    if (selectedCards.includes(index)) {
-        selectedCards.splice(selectedCards.indexOf(index), 1);
-    } else {
-        selectedCards.push(index);
-    }
+    dealCardButton.textContent = 'Deal card' + (c === '' ? '' : ' (' + c + ')');
 }
 
 function selectedCardsQueryArg() {
@@ -506,6 +503,25 @@ function deleteRecord() {
         );
 }
 
+function expectedDealerCards() {
+    var cards = document.getElementsByClassName('card');
+
+    var selected = 0;
+    var total = 0;
+
+    for (var i = 0; i < cards.length; i++) {
+        var card = cards[i];
+        if (card.classList.contains('selected') && !card.classList.contains('description') && !card.classList.contains('inHand')) {
+            selected++;
+        }
+        if (!card.classList.contains('description') && !card.classList.contains('inHand')) {
+            total++;
+        }
+    }
+   
+    return (!selected || !total) ? 0 : (total + 1) / (selected + 1) - 1;
+}
+
 const newGameButton = document.getElementById('new-game-btn');
 newGameButton.addEventListener('click', async () => {
     await newGame();
@@ -538,17 +554,15 @@ keyboard_ranks = {
 }
 
 function handleKeyDown(e) {
-    if (e.shiftKey) {
-        if (e.key in keyboard_ranks) {
-            toggleCards(keyboard_ranks[e.key], 'rank');
-        } else if (e.key in suits) {
-            toggleCards(suits[e.key], 'suit');
-        } else if (e.key === 'U') {
-            toggleCards('', '', true);
-        } else if (e.key === 'P') {
-            e.preventDefault();
-            playerNameInput.focus();
-        }
+    if (e.key in keyboard_ranks) {
+        toggleCards(keyboard_ranks[e.key], 'rank');
+    } else if (e.key in suits) {
+        toggleCards(suits[e.key], 'suit');
+    } else if (e.key === 'U') {
+        toggleCards('', '', true);
+    } else if (e.key === 'P') {
+        e.preventDefault();
+        playerNameInput.focus();
     }
     if (e.ctrlKey && e.altKey) {
         if (e.code === 'KeyD') {
