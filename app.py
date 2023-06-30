@@ -204,7 +204,7 @@ def get_record_by_hand_type(hand_type):
     return {
         'wins': wins,
         'losses': losses,
-        'percentage': float(wins / (wins + losses)) if wins + losses > 0 else 0 
+        'percentage': float(wins / (wins + losses)) if wins + losses > 0 else 0.0 
     }
 
 @app.route("/record/by_hand_type", methods=['GET'])
