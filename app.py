@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, make_response, render_template
 from flask_cors import CORS, cross_origin
-from redis_utils import rget, rset
+from redis_utils import rget, rset, redis
 from settings import LOCAL, player_hand_type_prefix
 from cards import rule_of_string, shuffled_deck, deal_card, best_five_card_hand, get_card, compare_hands
 from secrets import compare_digest, token_hex
@@ -18,6 +18,9 @@ class Player(Enum):
     PLAYER = 1
     DEALER = 2
 
+class Result(Enum):
+    WIN = 'wins'
+    LOSS = 'losses'
 
 def add_cards(cards, game_id, player=Player.PLAYER):
     key = 'cards' if player == Player.PLAYER else 'dealer_cards'
@@ -39,20 +42,24 @@ def add_card(card, game_id, player=Player.PLAYER):
 def str_add(a, b):
     return str(int(a) + b)
 
+def get_record_helper(player_name, result):
+    return int(rget(f'{player_name}:{result.value}', game_id=None) or 0)
+
 def add_win(player_name):
-    current_wins = rget(f'{player_name}:wins', game_id=None) or '0'
-    rset(f'{player_name}:wins', str_add(current_wins, 1), game_id=None, ex=None)
+    current_wins = get_record_helper(player_name, Result.WIN)
+    rset(f'{player_name}:wins', current_wins + 1, game_id=None, ex=None)
 
 def add_loss(player_name):
-    current_losses = rget(f'{player_name}:losses', game_id=None) or '0'
-    rset(f'{player_name}:losses', str_add(current_losses, 1), game_id=None, ex=None)
+    current_losses = get_record_helper(player_name, Result.LOSS)
+    rset(f'{player_name}:losses', current_losses + 1, game_id=None, ex=None)
 
 def get_record(player_name):
     if not player_name:
         return {'wins': 0, 'losses': 0}
-    wins = rget(f'{player_name}:wins', game_id=None) or '0'
-    losses = rget(f'{player_name}:losses', game_id=None) or '0'
-    return {'wins': wins, 'losses': losses}
+    return {
+        'wins': get_record_helper(player_name, Result.WIN), 
+        'losses': get_record_helper(player_name, Result.LOSS)
+    }
 
 @app.route("/", methods=['GET'])
 def index():
@@ -183,7 +190,23 @@ def delete_record():
     rset(f'{player_name}:losses', 0, game_id=None)
     return {'success': True, 'record': get_record(player_name)}
 
+def get_record_by_hand_type_helper(key, result):
+    return int(rget(f'{key}:{result.value}', game_id=None) or 0)
+
+def get_record_by_hand_type(hand_type):
+    key = f'{player_hand_type_prefix}{hand_type}'
+    return {
+        'wins': get_record_by_hand_type_helper(key, Result.WIN), 
+        'losses': get_record_by_hand_type_helper(key, Result.LOSS)
+    }
+
+@app.route("/record/by_hand_type", methods=['POST'])
+@cross_origin()
+def record_by_hand_type():
+    ret = []
+    for hand_type in ['straight_flush', 'four_of_a_kind', 'full_house', 'flush', 'straight', 'three_of_a_kind', 'two_pair', 'pair', 'high_card']:
+        ret.append({'type': hand_type, **get_record_by_hand_type(hand_type)}) 
+    return {'success': True, 'record': ret}
 
 if __name__ == '__main__':
-    print('app running!')
     app.run(host='0.0.0.0', port=5001 if LOCAL else 5002)

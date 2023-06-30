@@ -1,6 +1,6 @@
-URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
+// URL = 'http://ec2-34-192-101-140.compute-1.amazonaws.com:5002/'
 
-// URL = 'http://localhost:5001/'
+URL = 'http://localhost:5001/'
 
 let playerCards = []
 
@@ -351,7 +351,7 @@ function markDealerBestHand() {
     if (!dealerBestHand || dealerBestHand.length == 0) {
         return;
     }
-    
+
     function f(card) {
         if (highlightDealerBestHand.checked) {
             card.classList.add('dealer-best');
@@ -365,7 +365,7 @@ function markDealerBestHand() {
         if (includes(card, dealerBestHand)) {
             card = getCardElement(card['rank'], card['suit'], true);
             f(card);
-        } 
+        }
     }
 }
 
