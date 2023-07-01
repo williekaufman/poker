@@ -144,7 +144,7 @@ function getCardElement(rank, suit, inHand = false) {
     }
 }
 
-function toggleCards(value, type, all = false) {
+function toggleCards(value, type, r = (x) => false) {
     var cards = document.getElementsByClassName('card');
 
     cards_to_select = [];
@@ -153,7 +153,7 @@ function toggleCards(value, type, all = false) {
         if (card.classList.contains('description') || card.classList.contains('in-hand')) {
             return false;
         }
-        return all || card.querySelector(`.${type}`).textContent == value;
+        return r(card) || (type && card.querySelector(`.${type}`).textContent == value);
     }
 
     for (var i = 0; i < cards.length; i++) {
@@ -527,8 +527,6 @@ function expectedDealerCards() {
             }
     }
 
-    console.log(selected, total);
-
     return selected ? (total + selected + 1) / (selected + 1) - 1 : 0;
 }
 
@@ -553,6 +551,7 @@ keyboard_ranks = {
     'Q': 'Q',
     'J': 'J',
     'T': '10',
+    ')': '10',
     '(': '9',
     '*': '8',
     '&': '7',
@@ -563,16 +562,44 @@ keyboard_ranks = {
     '@': '2',
 }
 
+str_to_rank = {
+    'A': 14,
+    'K': 13,
+    'Q': 12,
+    'J': 11,
+    '10': 10,
+    '9': 9,
+    '8': 8,
+    '7': 7,
+    '6': 6,
+    '5': 5,
+    '4': 4,
+    '3': 3,
+    '2': 2,
+}
+
 function handleKeyDown(e) {
-    if (e.key in keyboard_ranks) {
+    if (!e.ctrlKey) 
+    {
+        if (e.key in keyboard_ranks) {
         toggleCards(keyboard_ranks[e.key], 'rank');
-    } else if (e.key in suits) {
-        toggleCards(suits[e.key], 'suit');
-    } else if (e.key === 'U') {
-        toggleCards('', '', true);
-    } else if (e.key === 'P') {
-        e.preventDefault();
-        playerNameInput.focus();
+        } else if (e.key in suits) {
+            toggleCards(suits[e.key], 'suit');
+        } else if (e.key === 'U') {
+            toggleCards('', '', true);
+        } else if (e.key === 'P') {
+            e.preventDefault();
+            playerNameInput.focus();
+        }
+    }
+    if (e.ctrlKey && !e.altKey) {
+        if (e.key in keyboard_ranks) {
+            e.preventDefault();
+            r = function (card) {
+                return str_to_rank[card.querySelector('.rank').textContent] >= str_to_rank[keyboard_ranks[e.key]];
+            }
+            toggleCards('', '', r); 
+        }
     }
     if (e.ctrlKey && e.altKey) {
         if (e.code === 'KeyD') {
