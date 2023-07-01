@@ -133,7 +133,7 @@
 }
 
 .how-to-play {
-  position: relative;
+  position: absolute;
   display: inline-block;
   cursor: pointer;
 }
