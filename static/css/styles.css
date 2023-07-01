@@ -202,3 +202,9 @@
     transform: translateX(-50%);
   }
 }
+
+@media (max-height: 700px) {
+  .hotkeys {
+    visibility: hidden;
+  }
+}
