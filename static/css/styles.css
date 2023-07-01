@@ -147,6 +147,8 @@
   white-space: no-wrap;
   word-wrap: no-wrap;
   display: inline-block;
+  text-align: center;
+  width: 80px;
   /* text-align: center; */
 }
 
