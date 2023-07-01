@@ -144,6 +144,7 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 16px;
+  word-wrap: no-wrap;
   /* text-align: center; */
 }
 
@@ -180,12 +181,6 @@
   bottom: 25px;
   left: 850px;
   transform: translateX(-50%); 
-}
-
-@media (min-width: 400px) {
-  .how-to-play-text {
-    font-size: 6px;
-  }
 }
 
 @media (min-width: 1500px) {
