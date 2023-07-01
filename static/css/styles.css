@@ -188,7 +188,7 @@
   transform: translateX(-50%); 
 }
 
-@media (min-width: 1800px) {
+@media (min-width: 1725px) {
   .grid {
     left: 50%;
     transform: translateX(-50%);
