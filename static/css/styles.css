@@ -168,7 +168,7 @@
 }
 
 .how-to-play-wrapper {
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 850px;
   transform: translateX(-50%);
@@ -176,7 +176,7 @@
 }
 
 .hotkeys {
-  position: fixed;
+  position: absolute;
   bottom: 25px;
   left: 850px;
   transform: translateX(-50%); 
