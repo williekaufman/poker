@@ -586,7 +586,7 @@ function handleKeyDown(e) {
         } else if (e.key in suits) {
             toggleCards(suits[e.key], 'suit');
         } else if (e.key === 'U') {
-            toggleCards('', '', true);
+            toggleCards('', '', (x) => true);
         } else if (e.key === 'P') {
             e.preventDefault();
             playerNameInput.focus();
