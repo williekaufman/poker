@@ -15,7 +15,7 @@
 .hotkeys {
     position: absolute;
     bottom: 25px;
-    right: 50%;
+    left: 800px;
     transform: translateX(50%);
     text-align: center;
 }
@@ -32,6 +32,7 @@
     /* justify-content: center; */
     width: 900px;
 }
+
 
 .hand-widget {
   display: grid;
@@ -85,6 +86,11 @@
 
 .card.spades {
     background-color: black;
+}
+
+.card.outline {
+  background-color: transparent;
+  border: 1px solid green;
 }
 
 .suit {
@@ -170,4 +176,19 @@
 
 .hotkeys p {
     margin-bottom: 0px;
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .hotkeys {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .how-to-play-wrapper {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }

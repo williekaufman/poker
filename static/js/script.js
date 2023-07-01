@@ -135,7 +135,7 @@ function getCardElement(rank, suit, inHand = false) {
     var cards = document.getElementsByClassName('card');
 
     function f(card) {
-        if (card.classList.contains('description')) {
+        if (card.classList.contains('description') || card.classList.contains('outline')) {
             return false;
         } if (card.classList.contains('in-hand') != inHand) {
             return false;
@@ -409,6 +409,14 @@ function updateCards() {
             <span class="rank">${card['rank']}</span>
             <span class="suit">${card['suit']}</span>
         `;
+        playerHand.appendChild(cardElement);
+    }
+
+    for (var i = 0; i < 5 - playerCards.length; i++) {
+        var cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.classList.add('in-hand');
+        cardElement.classList.add('outline');
         playerHand.appendChild(cardElement);
     }
 
