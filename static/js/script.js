@@ -116,6 +116,13 @@ suits = {
     'D': '♦',
 }
 
+keyboardSuits = {
+    'KeyS': '♠',
+    'KeyC': '♣',
+    'KeyH': '♥',
+    'KeyD': '♦',
+}
+
 classBySuits = {
     '♠': 'spades',
     '♣': 'clubs',
@@ -546,20 +553,20 @@ deleteRecordButton.addEventListener('click', async () => {
 });
 
 keyboard_ranks = {
-    'A': 'A',
-    'K': 'K',
-    'Q': 'Q',
-    'J': 'J',
-    'T': '10',
-    ')': '10',
-    '(': '9',
-    '*': '8',
-    '&': '7',
-    '^': '6',
-    '%': '5',
-    '$': '4',
-    '#': '3',
-    '@': '2',
+    'KeyA': 'A',
+    'KeyK': 'K',
+    'KeyQ': 'Q',
+    'KeyJ': 'J',
+    'KeyT': '10',
+    'Digit0': '10',
+    'Digit9': '9',
+    'Digit8': '8',
+    'Digit7': '7',
+    'Digit6': '6',
+    'Digit5': '5',
+    'Digit4': '4',
+    'Digit3': '3',
+    'Digit2': '2',
 }
 
 str_to_rank = {
@@ -579,25 +586,24 @@ str_to_rank = {
 }
 
 function handleKeyDown(e) {
-    if (!e.ctrlKey) 
-    {
-        if (e.key in keyboard_ranks) {
-        toggleCards(keyboard_ranks[e.key], 'rank');
-        } else if (e.key in suits) {
-            toggleCards(suits[e.key], 'suit');
-        } else if (e.key === 'U') {
+    if (!e.ctrlKey) {
+        console.log(e.code);
+        if (e.code in keyboard_ranks) {
+        toggleCards(keyboard_ranks[e.code], 'rank');
+        } else if (e.code in keyboardSuits) {
+            toggleCards(keyboardSuits[e.code], 'suit');
+        } else if (e.code === 'KeyU') {
             toggleCards('', '', (x) => true);
-        } else if (e.key === 'P') {
+        } else if (e.key === 'KeyP') {
             e.preventDefault();
             playerNameInput.focus();
         }
     }
     if (e.ctrlKey && !e.altKey) {
-        console.log(e);
-        if (e.key in keyboard_ranks) {
+        if (e.code in keyboard_ranks) {
             e.preventDefault();
             r = function (card) {
-                return str_to_rank[card.querySelector('.rank').textContent] >= str_to_rank[keyboard_ranks[e.key]];
+                return str_to_rank[card.querySelector('.rank').textContent] >= str_to_rank[keyboard_ranks[e.code]];
             }
             toggleCards('', '', r); 
         }
