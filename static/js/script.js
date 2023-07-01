@@ -26,6 +26,8 @@ let dealerHandDescription = document.getElementById('dealer-hand-description');
 
 let highlightDealerBestHand = document.getElementById('highlight-dealer-best-hand');
 
+let gameResult = document.getElementById('game-result');
+
 const howToPlayPopup = document.getElementById('how-to-play-popup');
 const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
 
@@ -318,6 +320,7 @@ function newGame() {
     playerCards = [];
     dealerBestHand = [];
     won = null;
+    gameResult.innerHTML = '';
 
     unselectAllCards();
     describeHands();
@@ -450,6 +453,8 @@ function handleFinished(data) {
     won = data.won;
     setRecord(data.record);
     showToast(data.message, 10);
+    gameResult.textContent = 'Game over. ' + data.message + (won ? ' :) ' : ' :( ');
+    gameResult.style.color = won ? 'green' : 'red';
 }
 
 function describeHands(playerDescription, dealerDescription) {
