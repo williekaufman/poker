@@ -26,8 +26,8 @@
     gap: 10px;
     position: absolute;
     top: 3%;
-    left: 50%;
-    transform: translateX(-50%); 
+    left: 400px;
+    /* transform: translateX(-50%);  */
     /* align-items: center; */
     /* justify-content: center; */
     width: 900px;
@@ -164,8 +164,7 @@
 .how-to-play-wrapper {
   position: fixed;
   top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 800px;
   z-index: 2;
 }
 
