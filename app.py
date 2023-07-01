@@ -46,10 +46,12 @@ def get_record_helper(player_name, result):
     return int(rget(f'{player_name}:{result.value}', game_id=None) or 0)
 
 def add_win(player_name):
+    print(f'adding win for {player_name}')
     current_wins = get_record_helper(player_name, Result.WIN)
     rset(f'{player_name}:wins', current_wins + 1, game_id=None, ex=None)
 
 def add_loss(player_name):
+    print(f'adding loss for {player_name}')
     current_losses = get_record_helper(player_name, Result.LOSS)
     rset(f'{player_name}:losses', current_losses + 1, game_id=None, ex=None)
 
