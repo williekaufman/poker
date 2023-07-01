@@ -593,6 +593,7 @@ function handleKeyDown(e) {
         }
     }
     if (e.ctrlKey && !e.altKey) {
+        console.log(e);
         if (e.key in keyboard_ranks) {
             e.preventDefault();
             r = function (card) {
