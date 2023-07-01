@@ -148,8 +148,9 @@
   word-wrap: no-wrap;
   display: inline-block;
   text-align: center;
+  align-items: center;
   width: 80px;
-  /* text-align: center; */
+  transform: translateX(-50%);
 }
 
 .how-to-play-popup {

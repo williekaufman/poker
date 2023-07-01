@@ -645,7 +645,7 @@ function toggleHowToPlay(event) {
     if (howToPlayPopup.style.visibility === 'hidden') {
         howToPlayPopup.style.visibility = 'visible';
         howToPlayPopup.style.opacity = '1';
-        howToPlayBtnText.textContent = 'Close how to play';
+        howToPlayBtnText.textContent = 'Close';
     } else {
         howToPlayPopup.style.visibility = 'hidden';
         howToPlayPopup.style.opacity = '0';
