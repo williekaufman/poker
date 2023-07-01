@@ -30,7 +30,7 @@
     /* transform: translateX(-50%);  */
     /* align-items: center; */
     /* justify-content: center; */
-    width: 900px;
+    width: 910px;
 }
 
 
@@ -38,7 +38,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
-  width: 200px;
+  width: 300px;
 }
 
 .winning {
@@ -170,15 +170,19 @@
 .how-to-play-wrapper {
   position: fixed;
   top: 10px;
-  left: 800px;
+  left: 850px;
+  transform: translateX(-50%);
   z-index: 2;
 }
 
-.hotkeys p {
-    margin-bottom: 0px;
+.hotkeys {
+  position: fixed;
+  bottom: 25px;
+  left: 850px;
+  transform: translateX(-50%); 
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1500px) {
   .grid {
     left: 50%;
     transform: translateX(-50%);

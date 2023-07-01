@@ -34,7 +34,7 @@ function setRecord(record) {
         document.getElementById('record').textContent = '';
         return;
     }
-    document.getElementById('record').textContent = `Record: ${record.wins} - ${record.losses}`;
+    document.getElementById('record').textContent = `${record.wins}W / ${record.losses}L`;
 }
 
 // Yes this is a stupid way to do it but copilot made it really fast lol
@@ -430,6 +430,14 @@ function updateCards() {
             <span class="rank">${card['rank']}</span>
             <span class="suit">${card['suit']}</span>
         `;
+        dealerHand.appendChild(cardElement);
+    }
+
+    for (var i = 0; i < 8 - dealerCards.length; i++) {
+        var cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.classList.add('in-hand');
+        cardElement.classList.add('outline');
         dealerHand.appendChild(cardElement);
     }
 
