@@ -619,7 +619,7 @@ function handleKeyDown(e) {
             playerNameInput.focus();
         }
     }
-    if (e.ctrlKey && !e.altKey) {
+    if (e.ctrlKey && !e.shiftKey) {
         if (e.code in keyboard_ranks) {
             e.preventDefault();
             r = function (card) {
@@ -628,7 +628,7 @@ function handleKeyDown(e) {
             toggleCards('', '', r); 
         }
     }
-    if (e.ctrlKey && e.altKey) {
+    if (e.ctrlKey && e.shiftKey) {
         if (e.code === 'KeyD') {
             e.preventDefault();
             dealCard();
