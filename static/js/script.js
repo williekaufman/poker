@@ -452,7 +452,6 @@ function updateCards() {
 function handleFinished(data) {
     won = data.won;
     setRecord(data.record);
-    showToast(data.message, 10);
     gameResult.textContent = 'Game over. ' + data.message + (won ? ' :) ' : ' :( ');
     gameResult.style.color = won ? 'green' : 'red';
 }
