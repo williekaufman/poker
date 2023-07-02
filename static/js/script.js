@@ -608,13 +608,12 @@ str_to_rank = {
 function handleKeyDown(e) {
     if (!e.ctrlKey) {
         if (e.code in keyboard_ranks) {
-        toggleCards(keyboard_ranks[e.code], 'rank');
+            toggleCards(keyboard_ranks[e.code], 'rank');
         } else if (e.code in keyboardSuits) {
             toggleCards(keyboardSuits[e.code], 'suit');
         } else if (e.code === 'KeyU') {
             toggleCards('', '', (x) => true);
-        } else if (e.key === 'KeyP') {
-            console.log('x');
+        } else if (e.code === 'KeyP') {
             e.preventDefault();
             playerNameInput.focus();
         }
