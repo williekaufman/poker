@@ -33,13 +33,14 @@ const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
 
 function setRecord(record) {
     let e = document.getElementById('record');
+    
     if (!record || (record.wins == 0 && record.losses == 0)) {
-        e.style.marginTop = '0';
+        e.parentElement.style.marginTop = '0px';
         e.textContent = '';
         return;
     }
    
-    e.style.marginTop = '10px';
+    e.parentElement.style.marginTop = '10px';
     e.textContent = `${record.wins}W / ${record.losses}L`;
 }
 
@@ -669,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function submitPlayerName() {
     localStorage.setItem('personalGoatPlayerName', playerNameInput.value);
     if (playerNameInput.value === '') {
-        document.getElementById('record').textContent = '';
+        setRecord();
         return;
     }
     getRecord();

@@ -16,9 +16,7 @@
         <div style="margin-top: 10px">
                 <input type="text" id="player-name-input" placeholder="Player name" style="margin-right: 5px">
         </div>
-        <div>
-                <span id="record"></span>
-        </div>
+        <div> <span id="record"></span> </div>
         <div> <button id="delete-record-btn" style="margin-top: 10px">Set record to 0 - 0</button> </div>
         <div style="margin-top: 10px"> <input type="checkbox" id="highlight-dealer-best-hand">
                 <label for="highlight-dealer-best-hand">Highlight dealer's best hand</label>
@@ -50,13 +48,17 @@
                                 <p> </p>
                                 <p> <strong> Coloring key </strong> </p>
                                 <grid style="gap: 10px; display: grid; grid-template-columns: repeat(13, 1fr);">
-                                        <p> <span class="card spades description big" style="display: flex">&spades;</span>
+                                        <p> <span class="card spades description big"
+                                                        style="display: flex">&spades;</span>
                                         </p>
-                                        <p> <span class="card clubs description big" style="display: flex">&clubs;</span>
+                                        <p> <span class="card clubs description big"
+                                                        style="display: flex">&clubs;</span>
                                         </p>
-                                        <p> <span class="card hearts description big" style="display: flex">&hearts;</span>
+                                        <p> <span class="card hearts description big"
+                                                        style="display: flex">&hearts;</span>
                                         </p>
-                                        <p> <span class="card diamonds description big" style="display: flex">♦</span></p>
+                                        <p> <span class="card diamonds description big" style="display: flex">♦</span>
+                                        </p>
                                 </grid>
                                 <p> <span class="card player-card description big"> </span> In player's hand </p>
                                 <p> <span class="card dealer-card description big"> </span> In dealer's hand </p>
@@ -203,19 +205,24 @@
                 <div class="hand"> </div>
         </div>
         <h1 id="game-result"> </h1>
-        <div class="hotkeys" >
-                <p> <h2> Hotkeys </h2> </p>
+        <div class="hotkeys">
+                <p>
+                <h2> Hotkeys </h2>
+                </p>
                 <strong> S|C|H|D </strong> - select all cards of a suit
                 <strong> A|K|Q|J|[T|0]|[9-2] </strong> - select all cards of a rank
                 <strong> U </strong> - select all cards
                 <strong> P </strong> - focus player name </p>
-                <p> <h3> Ctrl plus: </h3>
+                <p>
+                <h3> Ctrl plus: </h3>
                 <strong> A|K|Q|J|[T|0]|[9-2] </strong> - select all cards of a rank or higher </p>
-                <p> <h3> Ctrl plus alt plus: </h3>
+                <p>
+                <h3> Ctrl plus alt plus: </h3>
                 <strong> d </strong> - deal a card
                 <strong> n </strong> - new game
                 <strong> r </strong> - reset record </p>
         </div>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>
