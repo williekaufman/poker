@@ -607,7 +607,6 @@ str_to_rank = {
 
 function handleKeyDown(e) {
     if (!e.ctrlKey) {
-        console.log(e.code);
         if (e.code in keyboard_ranks) {
         toggleCards(keyboard_ranks[e.code], 'rank');
         } else if (e.code in keyboardSuits) {
@@ -615,6 +614,7 @@ function handleKeyDown(e) {
         } else if (e.code === 'KeyU') {
             toggleCards('', '', (x) => true);
         } else if (e.key === 'KeyP') {
+            console.log('x');
             e.preventDefault();
             playerNameInput.focus();
         }
