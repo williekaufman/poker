@@ -452,7 +452,7 @@ function updateCards() {
 function handleFinished(data) {
     won = data.won;
     setRecord(data.record);
-    gameResult.textContent = 'Game over. ' + data.message + (won ? ' :) ' : ' :( ');
+    gameResult.textContent = data.message;
     gameResult.style.color = won ? 'green' : 'red';
 }
 
