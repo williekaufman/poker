@@ -182,9 +182,10 @@
 }
 
 .hotkeys {
-  position: fixed;
+  position: absolute;
   bottom: 25px;
   left: 850px;
+  white-space: nowrap;
   transform: translateX(-50%); 
 }
 
@@ -203,7 +204,7 @@
   }
 }
 
-@media (max-height: 700px) {
+@media (max-height: 666px) {
   .hotkeys {
     visibility: hidden;
   }
