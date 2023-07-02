@@ -32,11 +32,15 @@ const howToPlayPopup = document.getElementById('how-to-play-popup');
 const howToPlayBtnText = document.getElementById('how-to-play-btn-text');
 
 function setRecord(record) {
+    let e = document.getElementById('record');
     if (!record || (record.wins == 0 && record.losses == 0)) {
-        document.getElementById('record').textContent = '';
+        e.style.marginTop = '0';
+        e.textContent = '';
         return;
     }
-    document.getElementById('record').textContent = `${record.wins}W / ${record.losses}L`;
+   
+    e.style.marginTop = '10px';
+    e.textContent = `${record.wins}W / ${record.losses}L`;
 }
 
 // Yes this is a stupid way to do it but copilot made it really fast lol
