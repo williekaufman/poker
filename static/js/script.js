@@ -301,8 +301,11 @@ function makeRequestOptions(body, method = 'POST') {
 
 function fetchWrapper(url, body, method = 'POST') {
     if (method == 'GET') {
+        if (body) {
+            url = `${url}?`;
+        }
         for (var key in body) {
-            url = `${url}?${key}=${body[key]}`;
+            url = `${url}${key}=${body[key]}&`;
         }
     }
     return fetch(url, makeRequestOptions(body, method));
