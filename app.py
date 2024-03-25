@@ -218,4 +218,4 @@ def record_by_hand_type():
     return {'success': True, 'record': sorted(ret, key=lambda x: x['percentage'], reverse=True)}
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001 if LOCAL else 5002)
+    app.run(host='0.0.0.0', port=5001 if LOCAL else 5019)
